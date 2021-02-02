@@ -1,0 +1,86 @@
+.button
+{
+    -fx-background-color :   	#d9d9d9;
+    -fx-text-fill : #000;
+}
+.button:hover{
+    -fx-background-color : #d9d9d9;
+}
+.button:pressed
+{
+    -fx-background-color : #fff
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .track,
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: #e52342;
+    -fx-background-radius: 5em;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: black;
+}
+
+
+.onHover{
+    -fx-background-color: #e52342;
+}
+
+.default-color0.chart-series-line { -fx-stroke: #e52342; }
+.default-color1.chart-series-line { -fx-stroke: #0000ff; }
+.default-color2.chart-series-line { -fx-stroke: #0000ff; }
+.default-color0.chart-line-symbol { -fx-background-color: #e52342, white; }
+.default-color1.chart-line-symbol { -fx-background-color: #0000ff, white; }
+.default-color2.chart-line-symbol { -fx-background-color: #0000ff, white; }
+.chart {
+    -fx-padding: 10px;
+    -fx-background-color: #010101;
+    -fx-legend-visible: false;
+}
+
+.chart-content {
+    -fx-padding: 30px;
+}
+
+.chart-title {
+    -fx-text-fill: #323438;
+    -fx-font-size: 1.6em;
+}
+
+.axis-label {
+    -fx-text-fill: #323438;
+}
+
+.chart-plot-background {
+    -fx-background-color:transparent;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke:#d2d1d1;
+}
+
+.chart-horizontal-grid-lines {
+    -fx-stroke: #d2d1d1;
+}
+
+.chart-alternative-row-fill {
+    -fx-fill:transparent;
+    -fx-stroke: transparent;
+}
+

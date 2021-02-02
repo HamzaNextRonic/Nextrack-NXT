@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="229.0" prefWidth="304.0" style="-fx-background-color: #fff " xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <AnchorPane maxHeight="-1.0" maxWidth="-1.0" style="-fx-background-color: #fff " prefHeight="229.0" prefWidth="304.0" VBox.vgrow="ALWAYS">
+            <children>
+                <StackPane alignment="BOTTOM_CENTER" prefHeight="229.0" prefWidth="304.0">
+                    <children>
+                        <ImageView fitHeight="229.0" fitWidth="304.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/app/images/loading.gif" />
+                            </image>
+                        </ImageView>
+                        <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="154.0" text="Chargement en cours..." textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </StackPane>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.ImageCursor?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="663.0"
+            prefWidth="934.0" style="-fx-background-color: #f1f1f1;" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.controller.HomeController">
+    <children>
+        <AnchorPane layoutX="275.0" layoutY="134.0" prefHeight="412.0" prefWidth="571.0">
+            <children>
+                <Button fx:id="submitBtn" layoutX="95.0" layoutY="254.0" mnemonicParsing="false" onAction="#Login"
+                        prefHeight="44.0" prefWidth="361.0"
+                        style="-fx-border-radius: 7PX; -fx-background-radius: 7px; -fx-background-color: #e42340;"
+                        text="S'authentifier" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="14.0"/>
+                    </font>
+                </Button>
+                <HBox alignment="CENTER_LEFT" layoutX="95.0" layoutY="120.0" prefHeight="44.0" prefWidth="361.0"
+                      style="-fx-background-color: #fff; -fx-border-radius: 7px; -fx-background-radius: 7px;"
+                      AnchorPane.bottomAnchor="248.0" AnchorPane.leftAnchor="95.0" AnchorPane.rightAnchor="115.0"
+                      AnchorPane.topAnchor="120.0">
+                    <children>
+                        <Pane prefHeight="44.0" prefWidth="17.0"/>
+                        <ImageView fitHeight="30.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/app/images/login_user.png"/>
+                            </image>
+                        </ImageView>
+                        <TextField fx:id="txtUsername" prefHeight="42.0" prefWidth="315.0" promptText="Utilisateur"
+                                   style="-fx-background-color: #fff;">
+                            <font>
+                                <Font size="14.0"/>
+                            </font>
+                            <opaqueInsets>
+                                <Insets/>
+                            </opaqueInsets>
+                        </TextField>
+                    </children>
+                </HBox>
+                <HBox alignment="CENTER_LEFT" layoutX="95.0" layoutY="181.0" prefHeight="44.0" prefWidth="361.0"
+                      style="-fx-background-color: #fff; -fx-border-radius: 7px; -fx-background-radius: 7px;">
+                    <children>
+                        <Pane prefHeight="44.0" prefWidth="17.0"/>
+                        <ImageView fitHeight="30.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/app/images/login_pwd.png"/>
+                            </image>
+                        </ImageView>
+                        <PasswordField fx:id="txtPassword" prefHeight="43.0" prefWidth="319.0" promptText="Mot de passe"
+                                       style="-fx-background-color: #fff;" onKeyPressed="#textAction"/>
+                    </children>
+                </HBox>
+                <Pane layoutX="171.0" prefHeight="99.0" prefWidth="209.0">
+                    <children>
+                        <ImageView fitHeight="63.0" fitWidth="209.0" layoutX="0.0" layoutY="22.0" pickOnBounds="true"
+                                   preserveRatio="true">
+                            <image>
+                                <Image url="/app/images/nextrack_logo.png"/>
+                            </image>
+                        </ImageView>
+                    </children>
+                </Pane>
+
+            </children>
+        </AnchorPane>
+
+        <Label fx:id="isConnected" alignment="CENTER" contentDisplay="CENTER" layoutX="306.0" layoutY="621.0"
+               prefHeight="27.0" prefWidth="462.0" text="Status" textFill="#3c3b3b">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Label>
+        <HBox layoutX="-238.0" layoutY="200.0" prefHeight="210.0" prefWidth="669.0" rotate="90.0"
+              style="-fx-background-color: #d9d9d9;">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="198.0" prefWidth="662.0" rotate="180.0"
+                       style="-fx-background-color: #d9d9d9;" text="LOGIN" textFill="#acacac">
+                    <font>
+                        <Font name="System Bold" size="64.0"/>
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+        <Button fx:id="btnCloseApp" mnemonicParsing="false" style="-fx-background-color: transparent;" layoutX="862.0"
+                layoutY="-5.0" onAction="#CloseScreen">
+            <graphic>
+                <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" layoutX="1061.0"
+                           layoutY="0.0">
+                    <image>
+                        <Image url="/app/images/closebtn.png"/>
+                    </image>
+
+                </ImageView>
+
+            </graphic>
+            <cursor>
+                <ImageCursor fx:constant="HAND"/>
+            </cursor>
+        </Button>
+    </children>
+
+</AnchorPane>
