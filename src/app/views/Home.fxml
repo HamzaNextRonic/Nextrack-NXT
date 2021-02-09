@@ -11,6 +11,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import com.jfoenix.controls.JFXDatePicker?>
+<?import com.jfoenix.controls.JFXTimePicker?>
 <AnchorPane prefHeight="550.0" prefWidth="1094.0" style="-fx-background-color: #d9d9d9;"
             xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="app.controller.HomeController">
@@ -1757,9 +1759,25 @@
                                 <Pane prefHeight="100.0" prefWidth="46.0"/>
                                 <VBox alignment="CENTER" prefHeight="93.0" prefWidth="236.0">
                                     <children>
-                                        <DatePicker fx:id="dtpikeri" onAction="#checkdate" promptText="Date initiale"/>
-                                        <Pane prefHeight="34.0" prefWidth="211.0"/>
+                                        <DatePicker fx:id="dtpikeri" onAction="#checkdate" promptText="Date initiale">
+                                            <cursor>
+                                                <Cursor fx:constant="HAND"/>
+                                            </cursor>
+                                        </DatePicker>
+                                        <JFXTimePicker fx:id="timepikerI" onAction="#checkTimeI" promptText="Heure de départ" >
+                                            <cursor>
+                                                <Cursor fx:constant="HAND"/>
+                                            </cursor>
+                                        </JFXTimePicker>
+                                        <JFXTimePicker fx:id="timepikerF" onAction="#checkTimeF" promptText="Heure d'arriver" >
+                                            <cursor>
+                                                <Cursor fx:constant="HAND"/>
+                                            </cursor>
+                                        </JFXTimePicker>
+<!--                                        <Pane prefHeight="34.0" prefWidth="211.0"/>-->
+
                                     </children>
+
                                 </VBox>
                                 <VBox prefHeight="93.0" prefWidth="243.0">
                                     <children>
@@ -1788,7 +1806,6 @@
                                         </Button>
                                     </children>
                                 </VBox>
-
                             </children>
                         </HBox>
                         <Pane fx:id="pnlchartLodingImage" layoutX="50.0" layoutY="99.0" prefHeight="402.0" prefWidth="724.0"
@@ -1804,7 +1821,6 @@
                                         <NumberAxis side="LEFT"/>
                                     </yAxis>
                                 </LineChart>
-
                                 <HBox alignment="CENTER" layoutX="415.0" layoutY="3.0" prefHeight="38.0"
                                       prefWidth="295.0">
                                     <children>

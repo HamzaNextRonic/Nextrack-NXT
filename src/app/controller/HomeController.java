@@ -8,6 +8,7 @@ import app.model.LoginModel;
 import app.model.User;
 import app.model.prevalent.Prevalent;
 import com.fazecast.jSerialComm.SerialPort;
+import com.jfoenix.controls.JFXTimePicker;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -73,7 +74,11 @@ import java.util.*;
 public class HomeController implements Initializable {
 
 
+
     long duration;
+
+    @FXML public JFXTimePicker timepikerI;
+    @FXML public JFXTimePicker timepikerF;
 
     @FXML
     public Button btngetErase;
@@ -758,15 +763,16 @@ public class HomeController implements Initializable {
         //BDD
         String serial = statsSelectDevice.getValue();
         LocalDate choosedDate = dtpikeri.getValue();
+
         //if(choosedDate.getMonth())
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm:ss");
-        String date = choosedDate.format(DateTimeFormatter.ofPattern("yyyy-M-d"));
-        String datePlus1 = choosedDate.plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-M-d"));
+        String date = choosedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String datePlus1 = choosedDate.plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         int idD = getIdDevice(serial);
         System.out.println("choosedDate " + choosedDate + "date = " + date);
 
-        String query = "select * from events where id_device =" + idD + " and  time >= '" + date + " 00:00:01" + "' and time <  '" + datePlus1 + " 00:00:00" + "'  ";
+        String query = "select * from events where id_device =" + idD + " and  time >= '" + date + " "+timepikerI.getValue()+":01" + "' and time <  '" + date + " "+timepikerF.getValue()+":00" + "'  ";
         System.out.println("creat contenet query  " +query);
         int count = 0;
         try {
@@ -833,12 +839,12 @@ public class HomeController implements Initializable {
         LocalDate choosedDate = dtpikeri.getValue();
         //if(choosedDate.getMonth())
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm:ss");
-        String date = choosedDate.format(DateTimeFormatter.ofPattern("yyyy-M-d"));
-        String datePlus1 = choosedDate.plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-M-d"));
+        String date = choosedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String datePlus1 = choosedDate.plusDays(1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         int idD = getIdDevice(serial);
         System.out.println("choosedDate " + choosedDate + "date = " + date);
 
-        String query = "select * from warnning where id_device = " + idD + " and  time >= '" + date + " 00:00:01" + "' and time <  '" + datePlus1 + " 00:00:00" + "'  ";
+        String query = "select * from warnning where id_device = " + idD + " and  time >= '" + date + " "+timepikerI.getValue()+":01" + "' and time <  '" + date + " "+timepikerF.getValue()+":00" + "'  ";
         int count = 0;
         try {
             PreparedStatement preparedStatement = null;
@@ -911,7 +917,7 @@ public class HomeController implements Initializable {
         LocalDate choosedDate = dtpikeri.getValue();
         //if(choosedDate.getMonth())
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm:ss");
-        String date = choosedDate.format(DateTimeFormatter.ofPattern("yyyy-M-d"));
+        String date = choosedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         int idD = getIdDevice(serial);
         System.out.println("choosedDate " + choosedDate + "date = " + date);
@@ -933,13 +939,6 @@ public class HomeController implements Initializable {
             statement = connection.prepareStatement(query1);
             ResultSet result = statement.executeQuery();
 
-//            PreparedStatement p = null;
-//            p = connection.prepareStatement(q);
-//            ResultSet r = p.executeQuery();
-//
-//            PreparedStatement s = null;
-//            s = connection.prepareStatement(q1);
-//            ResultSet r1 = statement.executeQuery();
 
 
             countMax = resultSet.getInt("countMax");
@@ -1001,15 +1000,13 @@ public class HomeController implements Initializable {
         LocalDate choosedDate = dtpikeri.getValue();
         //if(choosedDate.getMonth())
         //DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-M-d HH:mm:ss");
-        String date = choosedDate.format(DateTimeFormatter.ofPattern("yyyy-M-d"));
+        String date = choosedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         int idD = getIdDevice(serial);
         System.out.println("choosedDate " + choosedDate + "date = " + date);
 
-        //String query = "select Min(temperature) as minval , Max(temperature) as maxval , AVG(temperature) as avgval from warnning where id_device = " + idD + "";
         String query = " select count(temperature) as Wpoint from warnning where id_device = " + idD + "  ; ";
         String query1 = " select count(temperature) as Epoint from events where id_device = " + idD + "  ; ";
-
 
         String[][] content = new String[1][5];
         try {
@@ -1037,7 +1034,6 @@ public class HomeController implements Initializable {
             }else{
                 content[0][1] =  getEventsLastSave(serial);
             }
-
             content[0][2] = String.valueOf(resultSet.getInt("Wpoint") + r.getInt("Epoint"));
             content[0][3] = "5 minutes";
             content[0][4] = "";
@@ -1079,12 +1075,10 @@ public class HomeController implements Initializable {
             ((Node) event.getSource()).getScene().getWindow().hide();
             Stage primaryStage = new Stage();
             FXMLLoader loader = new FXMLLoader();
-            // Pane root = loader.load(getClass().getResource("/app/views/Login.fxml").openStream());
             Parent root = FXMLLoader.load(getClass().getResource("/app/views/Login.fxml"));
+
             primaryStage.setTitle("NexTrack | Authentification");
             primaryStage.getIcons().add(new Image("/app/images/icon.png"));
-
-            //primaryStage.setScene(new Scene(root, 1100, 560));
             primaryStage.initStyle(StageStyle.UNDECORATED);
             primaryStage.setScene(new Scene(root, 900, 600));
 
@@ -1112,23 +1106,18 @@ public class HomeController implements Initializable {
                 }
             });
 
-
             primaryStage.setResizable(false);
             primaryStage.show();
-            // chosenPort.closePort();
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
 
     public void addDevice(ActionEvent event) {
         getViews(pnlAddDevice, btnDevice, imgDevice);
         deviceLable.setText("Modifier un enregistreur");
-        //getViews(pnlAddDevice);
     }
 
     public void getViews(Pane newID, Button btn, ImageView img) {
@@ -1143,8 +1132,6 @@ public class HomeController implements Initializable {
         pnlUpdateUsers.setVisible(false);
         pnlUpdateDevice.setVisible(false);
         pnlIntitialDash.setVisible(false);
-        //pnlLoading.setVisible(false);
-        //pnlSettings.setVisible(false);
         btnDashboard.setStyle("-fx-text-fill: " + darkStyle);
         //  btnSettings.setStyle("-fx-text-fill: "+darkStyle);
         btnUpload.setStyle("-fx-text-fill: " + darkStyle);
@@ -1224,6 +1211,8 @@ public class HomeController implements Initializable {
 
     public void getStatistics(ActionEvent event) {
         getViews(pnlStatistics, btnStatistics, imgStatistics);
+        timepikerI.setIs24HourView(true);
+        timepikerF.setIs24HourView(true);
         getInfoCurrentUser();
         localData();
         dtpikeri.setValue(LocalDate.now());
@@ -2109,29 +2098,42 @@ public class HomeController implements Initializable {
     HashMap<String, Number> sortedList ;
     public void DrawChart() throws ParseException {
 
-    mainChart.setAnimated(false);
-    XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
-    sortedList = new HashMap<>();
-    series.setName("Température");
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-YYYY");
-    LocalDate selectedDate = dtpikeri.getValue();
-    String selectedDateF = formatter.format(selectedDate);
-    System.out.println("selectedDateF= " + selectedDateF);
-    String serial = statsSelectDevice.getValue();
-    int id = getIdDevice(serial);
-    String r = "select Min(temperature) as minval , Max(temperature) as maxval ,sum(temperature) as sum ,count(temperature) as nbpointE from events where id_device = "
-                    + id + " and (time >='"
-                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
-                + selectedDate.getDayOfMonth() + " 0:0:0' and time <= '"
-                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
-                + selectedDate.plusDays(1).getDayOfMonth()  + " 00:00:00')";
+            System.out.println("timeI"+timepikerI.getValue());
+            System.out.println("timeI"+timepikerF.getValue());
+
+
+        mainChart.setAnimated(false);
+        XYChart.Series<String, Number> series = new XYChart.Series<String, Number>();
+        sortedList = new HashMap<>();
+        series.setName("Température");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("YYYY-MM-dd");
+        LocalDate selectedDate = dtpikeri.getValue();
+        String selectedDateF = formatter.format(selectedDate.plusDays(1));
+            String selectedDateI = formatter.format(selectedDate);
+        System.out.println("selectedDateF= " + selectedDateF);
+        String serial = statsSelectDevice.getValue();
+        int id = getIdDevice(serial);
+//    String r = "select Min(temperature) as minval , Max(temperature) as maxval ,sum(temperature) as sum ,count(temperature) as nbpointE from events where id_device = "
+//                    + id + " and (time >='"
+//                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
+//                + selectedDate.getDayOfMonth() + " 00:00:00' and time <= '"
+//                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
+//                + selectedDate.plusDays(1).getDayOfMonth()  + " 00:00:00')";
+        String r = "select Min(temperature) as minval , Max(temperature) as maxval ,sum(temperature) as sum ,count(temperature) as nbpointE from events where id_device = "
+                + id + " and (time >='"
+                + selectedDateI+ " "+timepikerI.getValue()+":00' and time <= '"
+                + selectedDateI + " "+timepikerF.getValue()+":00')";
     System.out.println(r);
-    String rqw = "select Min(temperature) as minvalw , Max(temperature) as maxvalw , sum(temperature) as sumw, count(temperature) as nbpointW   from warnning where id_device = "
-                    + id + " and (time >='"
-                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
-                + selectedDate.getDayOfMonth() + " 00:00:00' and time < '"
-                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
-                + selectedDate.plusDays(1).getDayOfMonth()  + " 00:00:00')";
+//    String rqw = "select Min(temperature) as minvalw , Max(temperature) as maxvalw , sum(temperature) as sumw, count(temperature) as nbpointW   from warnning where id_device = "
+//                    + id + " and (time >='"
+//                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
+//                + selectedDate.getDayOfMonth() + " 00:00:00' and time < '"
+//                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
+//                + selectedDate.plusDays(1).getDayOfMonth()  + " 00:00:00')";
+        String rqw = "select Min(temperature) as minvalw , Max(temperature) as maxvalw , sum(temperature) as sumw, count(temperature) as nbpointW   from warnning where id_device = "
+                + id + " and (time >='"
+                + selectedDateI+ " "+timepikerI.getValue()+":00' and time < '"
+                +selectedDateI + " "+timepikerF.getValue()+":00')";
 
     System.out.println(rqw);
     try {
@@ -2140,7 +2142,6 @@ public class HomeController implements Initializable {
 
         PreparedStatement pw = connection.prepareStatement(rqw);
         ResultSet rw = pw.executeQuery();
-
 
         min = (Math.round(re.getFloat("minval") * 100)) / 100.0;
         System.out.println("min = " + re.getFloat("minval"));
@@ -2170,26 +2171,33 @@ public class HomeController implements Initializable {
         System.out.println("sumw " + sumw);
         System.out.println("NbPoints " + NbPoints);
 
-
     } catch (Exception throwables) {
         throwables.printStackTrace();
     }
 
     //01-16-2021
 
+//        String query = "select * from events " +
+//                "where id_device IN  (SELECT id from device where serial = '" + serial + "') and (time >='"
+//                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
+//                + selectedDate.getDayOfMonth() + " 00:00:00' and time < '"
+//                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
+//                + selectedDate.plusDays(1).getDayOfMonth()  + " 00:00:00')";
         String query = "select * from events " +
                 "where id_device IN  (SELECT id from device where serial = '" + serial + "') and (time >='"
-                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
-                + selectedDate.getDayOfMonth() + " 00:00:00' and time < '"
-                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
-                + selectedDate.plusDays(1).getDayOfMonth()  + " 00:00:00')";
+                + selectedDateI+ " "+timepikerI.getValue()+":00' and time < '"
+                + selectedDateI+ " "+timepikerF.getValue()+":00')";
         System.out.println(query);
+//        String query1 = "select * from warnning " +
+//                "where id_device IN  (SELECT id from device where serial = '" + serial + "') and (time >='"
+//                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
+//                + selectedDate.getDayOfMonth() + " 00:00:00' and time < '"
+//                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
+//                + selectedDate.plusDays(1).getDayOfMonth()  + " 00:00:00')";
         String query1 = "select * from warnning " +
                 "where id_device IN  (SELECT id from device where serial = '" + serial + "') and (time >='"
-                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
-                + selectedDate.getDayOfMonth() + " 00:00:00' and time < '"
-                + selectedDate.getYear() + "-" + selectedDate.getMonthValue() + "-"
-                + selectedDate.plusDays(1).getDayOfMonth()  + " 00:00:00')";
+                + selectedDateI+ " "+timepikerI.getValue()+":00' and time < '"
+                + selectedDateI + " "+timepikerF.getValue()+":00')";
         System.out.println(query1);
 
     PreparedStatement preparedStatement = null;
@@ -2211,7 +2219,7 @@ public class HomeController implements Initializable {
 
                 series.getData().add(new XYChart.Data("" + time, resultSet1.getFloat("temperature")));
                 sortedList.put("" + time,resultSet1.getFloat("temperature"));
-                //TODO: sorting list in chart
+
 
             }
             while (resultSet.next()) {
@@ -2280,13 +2288,7 @@ public class HomeController implements Initializable {
         }
     }
 }
-//sorting chart list
-    public HashMap<Long, Number> sortChart(){
-        HashMap<Long, Number> listToSort = new HashMap<>();
-        //sortedList.
 
-        return  listToSort;
-    }
     // Configures basic setup for the table and draws it page by page
     public void drawTable(PDDocument doc, Table table) throws IOException {
         // Calculate pagination
@@ -2645,7 +2647,7 @@ public class HomeController implements Initializable {
                 else if (maxw == 0 && minw == 0 )
                     maxVal = max;
                 else
-                    maxVal = Math.min(maxw, max);
+                    maxVal = Math.max(maxw, max);
                 System.out.println("maxVal"+maxVal);
                 double avgVal = avg;
                 System.out.println("avg = "+avg);
@@ -3020,8 +3022,6 @@ public class HomeController implements Initializable {
             }
         } else {
             System.out.println("else is_firstTime = " + is_firstTime);
-            /*chosenPort.clearDTR();
-            chosenPort.setRTS();*/
             chosenPort.closePort();
             portName = "";
             SerialPort[] portNamee = SerialPort.getCommPorts();
@@ -3049,7 +3049,6 @@ public class HomeController implements Initializable {
                     String date = null, time = null, temperature = null;
                     String date1 = null;
                     Scanner scanner = new Scanner(chosenPort.getInputStream());
-                    //System.out.println(chosenPort.getBaudRate());
                     int cnt = 0, cp = 0;
                     while (scanner.hasNextLine()) {
                         System.out.println("scanner.hasNextLine " + scanner.hasNextLine());
@@ -3064,71 +3063,50 @@ public class HomeController implements Initializable {
                                 overlayDataTuto.setVisible(true);
                                 break;
                             }
-
-
                             String[] parts = line.split("\\|", -2);
                             System.out.println("parth " + parts.length);
                             if (parts.length > 3) {
                                 continue;
                             }
 
-                          //  System.out.println("00");
                             int count = StringUtils.countMatches(line.trim(), ":");
                             if ((parts.length == 2 || parts.length == 1) && count != 5) {
-                              //  System.out.println("00-1");
                                 continue;
                             }
-                            //System.out.println("11");
                             if (count == 5 && line.length() <= 17) {
-                              //  System.out.println("11-1");
                                 serialNumber = line.trim();
                                 System.out.println("serial = " + serialNumber);
-                                // System.out.println("serial "+serialNumber);
                                 if (!getAllDevices().contains(serialNumber)) {
                                     System.out.println("please add your device first");
-                                    //num_serial_id.setText(serialNumber);
                                     String query = "insert into device (serial, name, interval, description ,type, user_ID) values ('"
                                             + serialNumber + "','" + "---" + "' ," + 0 + ", '" + "--" + "'," + 0 + ","
                                             + Prevalent.currentOnlineUser.getId() + ");";
                                     PreparedStatement preparedStatement = connection.prepareStatement(query);
                                     preparedStatement.executeUpdate();
-                                    //int id = getIdDevice(serialNumber);
                                     updateDevice(serialNumber);
-                                    //overlayDataLoading.setVisible(false);
                                     break;
                                 }
                                 continue;
                             }
-                           // System.out.println("33");
-                           /* if(parts.length==1 && line.length()>=17) {
-                                serialNumber=line.trim();
-                                continue;
-                            }*/
+
                             start = true;
                             System.out.println("start = " + start);
                             overlayDataLoading.setVisible(true);
                             for (String a : parts) {
                                 if (a.contains("@")) {
                                     start = true;
-
                                 }
                                 //this if not used bcs we test the existence of ! in the line not in each part
-
                                 if (a.contains("!")) {
-
                                     overlayDataLoading.setVisible(false);
                                     overlayDataTuto.setVisible(true);
                                     pnlUpload.getChildren().get(4).setVisible(false);
                                     start = false;
                                     break;
                                 }
-
                                 if (!a.contains("@") && !a.contains("!") && start) {
                                     try {
-                                     //   System.out.println("77");
                                         overlayDataTuto.setVisible(false);
-//                                         System.out.println("jjjjj "+j);
-
                                         if (j == 0) {
                                           //  date
                                             date = a.trim().replace("/", "-");
@@ -3158,20 +3136,22 @@ public class HomeController implements Initializable {
                                                 //System.out.println("cp " + cp);
                                                // System.out.println("day1 " + date1);
                                                //event1.get(cp).setTemperature(Float.parseFloat(temperature));
-                                                Timestamp t = new Timestamp(new SimpleDateFormat("yyyy-m-d H:m:s").parse(date + " " + time).getTime());
+                                                Timestamp t = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date + " " + time).getTime());
                                                 //Timestamp t = Timestamp.valueOf(day.toString() + " " + time);
+                                                String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(t.getTime());
                                                 System.out.println(" date " + date);
                                                 System.out.println(" time " + time);
                                                 System.out.println(" t " + t);
 /**
  * *************************************************************************
  */
-                                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-m-d");
+                                                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
 
                                                 Calendar calendar = Calendar.getInstance();
                                                 calendar.setTime(t);
                                                 System.out.println("calendar "+calendar.getTime());
-                                                calendar.add(Calendar.MINUTE, 19440);
+                                               //calendar.add(Calendar.MINUTE, 1920);
+                                                //calendar.add(Calendar.MINUTE, 19500); 13J +13H
 
                                                 System.out.println("calendarAffterAdd "+calendar.getTime());
                                                 //System.out.println(" date1 "+date1);
@@ -3186,38 +3166,33 @@ public class HomeController implements Initializable {
                                                 int minute     = calendar.get(Calendar.MINUTE);
                                                 int second     = calendar.get(Calendar.SECOND);
                                                 String dt = year+"-"+(month+1)+"-"+dayOfMonth+" "+hourOfDay+":"+minute+":"+second;
-                                                System.out.println("dt "+dt);
-/**
- *
- */
 
+                                                Date dt1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dt);
+                                                System.out.println("dt1 "+dt1);
+/**
+ *****************************************************************************************************************************
+ */
                                                 Instant instant = calendar.getTime().toInstant();
                                                 System.out.println("instant " + instant);
-                                                //event1.get(cp).setTimeEvent(instant);
-                                                    // System.out.println("event1.get(cp).setTimeEvent1.get(cp).setTimeEvent(instant) "+event1.get(cp).getTimeEvent());
                                                 Event e = new Event(Float.parseFloat(temperature),instant);
                                                 event1.add(e);
-
                                                 String d = getDateLastSave(serialNumber);
                                                 System.out.println("d = "+d);
-                                                formatter = new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
+                                                formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                                                 Date lastDate = formatter.parse(d);
                                                 System.out.println("lastDate  " + lastDate);
                                                 //System.out.println("timeeeee " + time);
                                                 Date currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dt );
                                                 System.out.println("currentDate  " + currentDate);
-
-
                                                 System.out.println("+contains serial+ " + getAllDevices().contains(serialNumber));
                                                 System.out.println("+currentDate+ " + currentDate.after(lastDate));
                                                 if (getAllDevices().contains(serialNumber) && (currentDate.after(lastDate) || currentDate== lastDate)) {//
                                                     try {
-                                                        //System.out.println("0000000 insert into events ");
                                                         String query = "";
                                                         if(Float.parseFloat(temperature)<=2 || Float.parseFloat(temperature)>=8 ){
                                                             query = "insert into warnning (temperature,Time,id_device,record_ID,valiseId) values ("
                                                                 + Float.parseFloat(temperature) +
-                                                                ",'" + dt + "',"
+                                                                ",'" + timeStamp + "',"
                                                                 + getIdDevice(serialNumber)
                                                                 + "," + 1 + ",'"
                                                                 + valise + "') ";
@@ -3225,7 +3200,7 @@ public class HomeController implements Initializable {
                                                         else{
                                                             query = "insert into events (temperature,Time,id_device,record_ID,valiseId) values ("
                                                                     + Float.parseFloat(temperature) +
-                                                                    ",'" + dt + "',"
+                                                                    ",'" + timeStamp + "',"
                                                                     + getIdDevice(serialNumber)
                                                                     + "," + 1 + ",'"
                                                                     + valise + "') ";
@@ -3240,34 +3215,25 @@ public class HomeController implements Initializable {
                                                         aa.printStackTrace();
                                                     }
                                                 }
-
                                             }
                                             else continue;
-
                                         }
-
                                         index++;
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
                                 }
-
                             }
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                         cp++;
                     }
-
                     scanner.close();
                 }
             };
-
             thread.start();
             overlayDataLoading.setVisible(false);
-
         }
         is_firstTime = false;
         InsertEvent();
@@ -3363,15 +3329,10 @@ public class HomeController implements Initializable {
                             String[] parts = line.split("\\|", -2);
                             System.out.println("parth " + parts.length);
                             if (parts.length > 3) {
-
                                 continue;
-
                             }
-
-                           // System.out.println("00");
                             int count = StringUtils.countMatches(line.trim(), ":");
                             if ((parts.length == 2 || parts.length == 1) && count != 5) {
-                               // System.out.println("00-1");
                                 continue;
                             }
                             //System.out.println("11");
@@ -3451,61 +3412,85 @@ public class HomeController implements Initializable {
                                        // System.out.println("77-4");
                                         j++;
                                         if (j == 3) {
-                                            if (!time.isEmpty() && !date.isEmpty() && !temperature.isEmpty()) {
-                                               // System.out.println("77-5");
-//                                              System.out.println("bDate= "+bDate);
-//                                              System.out.println("bTime= "+bTime);
-                                               // System.out.println("77-6");
+                                            j = 0;
+                                            Timestamp t = new Timestamp(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date + " " + time).getTime());
+                                            String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(t.getTime());
+                                            //Timestamp t = Timestamp.valueOf(day.toString() + " " + time);
+                                            System.out.println(" timeStamp " + timeStamp);
+                                            System.out.println(" date " + date);
+                                            System.out.println(" time " + time);
+                                            System.out.println(" t " + t);
+/**
+ * *************************************************************************
+ */
+                                            SimpleDateFormat formatter =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                                            Calendar calendar = Calendar.getInstance();
+                                            calendar.setTime(t);
+                                            System.out.println("calendar "+calendar.getTime());
+                                            //calendar.add(Calendar.MINUTE, 19500);13J+13H
+
+                                           // System.out.println("calendarAffterAdd "+calendar.getTime());
+                                            //System.out.println(" date1 "+date1);
+                                           // Date day =   calendar.getTime();
+                                            //System.out.println("day "+day);
+//                                                date1 = formatter.format(day);
+//                                                System.out.println(" date1 "+date1);
+                                            int year       = calendar.get(Calendar.YEAR);
+                                            int month      = calendar.get(Calendar.MONTH); // Jan = 0, dec = 11
+                                            int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
+                                            int hourOfDay  = calendar.get(Calendar.HOUR_OF_DAY); // 24 hour clock
+                                            int minute     = calendar.get(Calendar.MINUTE);
+                                            int second     = calendar.get(Calendar.SECOND);
+                                            String dt = year+"-"+(month+1)+"-"+dayOfMonth+" "+hourOfDay+":"+minute+":"+second;
+
+                                           Date dt1 = formatter.parse(dt);
+                                            System.out.println("dt1 "+dt1);
+/**
+ *
+ */
+                                            Instant instant = calendar.getTime().toInstant();
+
+                                            //event1.get(cp).setTimeEvent(instant);
+                                            // System.out.println("event1.get(cp).setTimeEvent1.get(cp).setTimeEvent(instant) "+event1.get(cp).getTimeEvent());
+                                            Event e = new Event(Float.parseFloat(temperature),instant);
+                                            event1.add(e);
+
+                                            String d = getDateLastSave(serialNumber);
+                                            //System.out.println("d = "+d);
+                                            formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                                            Date lastDate = formatter.parse(d);
+                                            //System.out.println("lastDate  " + lastDate);
+                                            //System.out.println("timeeeee " + time);
+                                            Date currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dt );
+
+
+
+                                           // System.out.println("+contains serial+ " + getAllDevices().contains(serialNumber));
+                                           // System.out.println("+currentDate+ " + currentDate.after(lastDate));
+                                            if (getAllDevices().contains(serialNumber) && currentDate.after(lastDate)) {//
                                                 try {
-                                                    event1.get(cp).setTemperature(Float.parseFloat(temperature));
-                                                    Timestamp t = Timestamp.valueOf(date + " " + time);
-                                                    System.out.println("t " + t);
-                                                    Instant instant = t.toInstant();
-                                                    System.out.println("instant " + instant);
-                                                    event1.get(cp).setTimeEvent(instant);
-                                                    // System.out.println("event1.get(cp).setTimeEvent1.get(cp).setTimeEvent(instant) "+event1.get(cp).getTimeEvent());
-
-                                                } catch (Exception e) { //this generic but you can control another types of exception
-                                                    // look the origin of excption
+                                                   // System.out.println("0000000 insert into warning ");
+                                                    String query = "insert into warnning (temperature,Time,id_device,record_ID,valiseId) values ("
+                                                            + Float.parseFloat(temperature) +
+                                                            ",'" + timeStamp+ "',"
+                                                            + getIdDevice(serialNumber)
+                                                            + "," + 1 + ",'"
+                                                            + valise + "') ;";
+                                                   // System.out.println("111111 insert into warning ");
+                                                    preparedStatement = connection.prepareStatement(query);
+                                                    //System.out.println("22222222 insert into warning ");
+                                                    resultSet = preparedStatement.executeUpdate();
+                                                    //System.out.println("3333333 insert into warning ");
+                                                } catch (Exception aa) {
+                                                    aa.printStackTrace();
                                                 }
-                                                //System.out.println("j=3"+a.trim());
-                                                String d = getDateLastSave(serialNumber);
-
-                                                Date lastDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(d);
-                                                System.out.println("lastDate  " + lastDate);
-                                                System.out.println("timeeeee " + time);
-                                                Date currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(date + " " + time);
-                                                System.out.println("currentDate  " + currentDate);
-
-
-                                                System.out.println("+contains serial+ " + getAllDevices().contains(serialNumber));
-                                                System.out.println("+currentDate+ " + currentDate.after(lastDate));
-                                                if (getAllDevices().contains(serialNumber) && currentDate.after(lastDate)) {//
-                                                    try {
-                                                        //System.out.println("0000000 insert into events ");
-                                                        String query = "insert into warnning (temperature,Time,id_device,record_ID,valiseId) values ("
-                                                                + Float.parseFloat(temperature) +
-                                                                ",'" + date + " "
-                                                                + time + "',"
-                                                                + getIdDevice(serialNumber)
-                                                                + "," + 1 + ",'"
-                                                                + valise + "') ";
-                                                        // System.out.println("query" + query);
-                                                        // System.out.println("1111");
-                                                        preparedStatement = connection.prepareStatement(query);
-                                                        //System.out.println("2222 into events");
-                                                        resultSet = preparedStatement.executeUpdate();
-                                                        //System.out.println("33333 into events");
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
-                                                j = 0;
                                             }
-                                            else continue;
+
+                                            index++;
                                         }
 
-                                        index++;
+
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -3535,217 +3520,12 @@ public class HomeController implements Initializable {
         duration = ChronoUnit.MILLIS.between(fromData, toData);
     }
 
-    public void getSerialWarningss() throws Exception {
-        if (is_firstTime) {
-            //AutoDetect
-            SerialPort[] portNames = SerialPort.getCommPorts();
-            for (int i = 0; i < portNames.length; i++)
-                portName = portNames[i].getSystemPortName();
-            chosenPort = SerialPort.getCommPort(portName != "" ? portName : "COM6");
-            //chosenPort.setBaudRate(115200);
-            chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 100, 100);
-            if (chosenPort.openPort()) {
-                //Port opened
-                String stringOut = "READ WARNING" + "\n";
-                chosenPort.writeBytes(stringOut.getBytes(), stringOut.getBytes().length);
-            } else {
-                portName = "";
-                SerialPort[] portNamee = SerialPort.getCommPorts();
-                //chosenPort.closePort();
-                for (int i = 0; i < portNamee.length; i++)
-                    portName = portNamee[i].getSystemPortName();
-                chosenPort = SerialPort.getCommPort(portName != "" ? portName : "COM6");
-                System.out.println("chosenPort " + portName);
-                chosenPort.setBaudRate(115200);
-                chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 100, 100);
-                String stringOut = "READ WARNING" + "\n";
-                chosenPort.writeBytes(stringOut.getBytes(), stringOut.getBytes().length);
-            }
-        } else {
-            /*chosenPort.clearDTR();
-            chosenPort.setRTS();*/
-            chosenPort.setComPortTimeouts(SerialPort.TIMEOUT_SCANNER, 100, 100);
-            chosenPort.setBaudRate(115200);
-
-            String stringOut = "READ WARNING" + "\n";
-            if (chosenPort.openPort()) {
-                chosenPort.writeBytes(stringOut.getBytes(), stringOut.getBytes().length);
-                is_firstTime = true;
-            }
-
-        }
-
-        if (is_firstTime) {
-            // create a new thread that listens for incoming text and populates the DataSet
-            Thread threadW = new Thread() {
-                @Override
-                public void run() {
-                    String date = null, time = null, temperature = null;
-                    Scanner scanner = new Scanner(chosenPort.getInputStream());
-                    //System.out.println(chosenPort.getBaudRate());
-                    int cnt = 0, cp = 0;
-                    while (scanner.hasNextLine()) {
-                        try {
-                            String line = scanner.nextLine();
-                            if (line.contains("@")) cnt++;
-                            if (cnt < 2) continue;
-                            if (line.contains("!")) {
-                                overlayDataLoading.setVisible(false);
-                                sleep(10);
-                                overlayDataTuto.setVisible(true);
-                                break;
-                            }
-
-                            String[] parts = line.split("\\|", -2);
-                            if (parts.length > 3) {
-                                // System.out.println("parth "+ parts.length );
-                                continue;
-                            }
-                            int count = StringUtils.countMatches(line.trim(), ":");
-                            if (count == 5 && line.length() <= 17) {
-                                serialNumber = line.trim();
-                                // System.out.println("serial "+serialNumber);
-                                if (!getAllDevices().contains(serialNumber)) {
-                                    System.out.println("please add your device first");
-                                    //num_serial_id.setText(serialNumber);
-                                    String query = "insert into device (serial, name, interval, description ,type, user_ID) values ('"
-                                            + serialNumber + "','" + "---" + "' ," + 0 + ", '" + "--" + "'," + 0 + ","
-                                            + Prevalent.currentOnlineUser.getId() + ")";
-                                    PreparedStatement preparedStatement = connection.prepareStatement(query);
-                                    preparedStatement.executeUpdate();
-                                    //int id = getIdDevice(serialNumber);
-                                    updateDevice(serialNumber);
-                                    overlayDataLoading.setVisible(false);
-                                    overlayDataTuto.setVisible(true);
-                                    break;
-                                }
-                                continue;
-                            }
-                            start = true;
-                            overlayDataLoading.setVisible(true);
-                            for (String a : parts) {
-                                if (a.contains("@")) {
-                                    start = true;
-                                    overlayDataLoading.setVisible(true);
-                                    overlayDataTuto.setVisible(false);
-                                }
-                                //not used
-                                if (a.contains("!")) {
-                                    start = false;
-                                    overlayDataLoading.setVisible(false);
-                                    overlayDataTuto.setVisible(true);
-                                }
-                                if (!a.contains("@") && !a.contains("!") && start) {
-                                    //if(){
-                                    // System.out.println("NewLine : " + index);
-                                    // System.out.println("Serial "+serialNumber);
-                                    if (j == 0) {
-                                        date = a.trim().replace("/", "-");
-                                        System.out.println("j=0 " + date);
-                                    }
-                                    if (j == 1) {
-                                        time = a.trim();
-                                        System.out.println("j=1 " + time);
-                                    }
-                                    if (j == 2) {
-                                        temperature = a.trim();
-                                        System.out.println("j=2 " + temperature);
-                                    }
-                                    j++;
-                                    if (j == 3) {
-                                        j = 0;
-                                        Timestamp t = new Timestamp(new SimpleDateFormat("yyyy-m-d H:m:s").parse(date + " " + time).getTime());
-                                        //Timestamp t = Timestamp.valueOf(day.toString() + " " + time);
-                                        System.out.println(" date " + date);
-                                        System.out.println(" time " + time);
-                                        System.out.println(" t " + t);
-/**
- * *************************************************************************
- */
-                                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-m-d");
-
-                                        Calendar calendar = Calendar.getInstance();
-                                        calendar.setTime(t);
-                                        System.out.println("calendar "+calendar.getTime());
-                                        calendar.add(Calendar.MINUTE, 19440);
-
-                                        System.out.println("calendarAffterAdd "+calendar.getTime());
-                                        //System.out.println(" date1 "+date1);
-                                        Date day =   calendar.getTime();
-                                        System.out.println("day "+day);
-//                                                date1 = formatter.format(day);
-//                                                System.out.println(" date1 "+date1);
-                                        int year       = calendar.get(Calendar.YEAR);
-                                        int month      = calendar.get(Calendar.MONTH); // Jan = 0, dec = 11
-                                        int dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-                                        int hourOfDay  = calendar.get(Calendar.HOUR_OF_DAY); // 24 hour clock
-                                        int minute     = calendar.get(Calendar.MINUTE);
-                                        int second     = calendar.get(Calendar.SECOND);
-                                        String dt = year+"-"+(month+1)+"-"+dayOfMonth+" "+hourOfDay+":"+minute+":"+second;
-                                        System.out.println("dt "+dt);
-/**
- *
- */
-
-                                        Instant instant = calendar.getTime().toInstant();
-                                        System.out.println("instant " + instant);
-                                        //event1.get(cp).setTimeEvent(instant);
-                                        // System.out.println("event1.get(cp).setTimeEvent1.get(cp).setTimeEvent(instant) "+event1.get(cp).getTimeEvent());
-                                        Event e = new Event(Float.parseFloat(temperature),instant);
-                                        event1.add(e);
-
-                                        String d = getDateLastSave(serialNumber);
-                                        System.out.println("d = "+d);
-                                        formatter = new SimpleDateFormat("yyyy-M-dd HH:mm:ss");
-                                        Date lastDate = formatter.parse(d);
-                                        System.out.println("lastDate  " + lastDate);
-                                        //System.out.println("timeeeee " + time);
-                                        Date currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(dt );
-                                        System.out.println("currentDate  " + currentDate);
-
-
-                                        System.out.println("+contains serial+ " + getAllDevices().contains(serialNumber));
-                                        System.out.println("+currentDate+ " + currentDate.after(lastDate));
-                                        if (getAllDevices().contains(serialNumber) && currentDate.after(lastDate)) {//
-                                            try {
-                                                System.out.println("0000000 insert into warning ");
-                                                String query = "insert into warnning (temperature,Time,id_device,record_ID,valiseId) values ("
-                                                        + Float.parseFloat(temperature) +
-                                                        ",'" + dt+ "',"
-                                                        + getIdDevice(serialNumber)
-                                                        + "," + 1 + ",'"
-                                                        + valise + "') ;";
-                                                System.out.println("111111 insert into warning ");
-                                                preparedStatement = connection.prepareStatement(query);
-                                                System.out.println("22222222 insert into warning ");
-                                                resultSet = preparedStatement.executeUpdate();
-                                                System.out.println("3333333 insert into warning ");
-                                            } catch (Exception aa) {
-                                                aa.printStackTrace();
-                                            }
-                                        }
-                                        j = 0;
-                                        index++;
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                        }
-                        cp++;
-                    }
-                    scanner.close();
-                }
-            };
-            threadW.start();
-        }
-        InsertWarnning();
-        is_firstTime = false;
-    }
 
     public void InsertEvent() {
         try {
             for (int i = 0; i < event1.size(); i++) {
-                Timestamp time = Timestamp.from(event1.get(i).getTimeEvent());
+                Date time = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").parse(String.valueOf(Timestamp.from(event1.get(i).getTimeEvent())));
+                System.out.println("insrtEvent: "+time);
                 String query = "";
                 if( event1.get(i).getTemperature() >= 8 || event1.get(i).getTemperature() <=2 ) {
                     query = "insert into warnning (temperature,Time,id_device,record_ID,valiseId) values (" + event1.get(i).getTemperature()
@@ -3765,7 +3545,8 @@ public class HomeController implements Initializable {
     public void InsertWarnning() throws SQLException {
         try {
             for (int i = 0; i < event1.size(); i++) {
-                Timestamp time = Timestamp.from(event1.get(i).getTimeEvent());
+                Date time = new SimpleDateFormat("MM-dd-yyyy HH:mm:ss").parse(String.valueOf(Timestamp.from(event1.get(i).getTimeEvent())));
+                //Timestamp time = Timestamp.from(event1.get(i).getTimeEvent());
                 String query = "insert into warnning (temperature,Time,id_device,record_ID,valiseId) values (" + event1.get(i).getTemperature()
                         + ",'" + time + "'," + getIdDevice(serialNumber) + "," + 1 + ",'" + valise + "');";
                 PreparedStatement preparedStatement = connection.prepareStatement(query);
@@ -3825,7 +3606,7 @@ public class HomeController implements Initializable {
     }
 
     private String getWarningFirstSave(String serial) {
-        String query = "select time from events  where id_device =' " + getIdDevice(serial) + "' ORDER BY id Asc LIMIT 1;  ";
+        String query = "select time from warnning  where id_device =' " + getIdDevice(serial) + "' ORDER BY id Asc LIMIT 1;  ";
         ResultSet resultSet = null;
         String time = "0000-00-00 00:00:00";
         try {
@@ -4556,5 +4337,12 @@ public class HomeController implements Initializable {
             return false;
         }
         return true;
+    }
+    
+
+    public void checkTimeI(ActionEvent event) {
+    }
+
+    public void checkTimeF(ActionEvent event) {
     }
 }
