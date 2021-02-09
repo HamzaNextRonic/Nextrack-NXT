@@ -1212,10 +1212,14 @@ public class HomeController implements Initializable {
     public void getStatistics(ActionEvent event) {
         getViews(pnlStatistics, btnStatistics, imgStatistics);
         timepikerI.setIs24HourView(true);
+        timepikerI.setStyle("-fx-icon-color:"+colorStyle);
+        timepikerF.setStyle("-fx-icon-color:"+colorStyle);
         timepikerF.setIs24HourView(true);
         getInfoCurrentUser();
         localData();
         dtpikeri.setValue(LocalDate.now());
+        timepikerI.setValue(LocalTime.parse("00:00"));
+        timepikerF.setValue(LocalTime.parse("23:59"));
     }
 
     public void getUsers(ActionEvent event) {
